@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: discovery-service
+
+server:
+  port: 8761 #Porta su cui Eureka sarà in ascolto
+
+eureka:
+  instance:
+    hostname: localhost
+
+  client:
+    register-with-eureka: false #Hostname di Eureka
+    fetch-registry: false #Eureka NON deve registrarsi con se stesso
+    service-url:
+      default-zone:
+        https://${eureka.instance.hostname}:${server.port}/eureka/
