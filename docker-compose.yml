@@ -1,0 +1,17 @@
+services:
+  eureka:
+    image: desantisdomiziano/discovery-service:1.0.0 # La TUA immagine
+    ports:
+      - "8761:8761"
+    networks:
+      - my-network
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  my-network:
+    driver: bridge
