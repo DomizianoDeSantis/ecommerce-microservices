@@ -1,6 +1,6 @@
 services:
   eureka:
-    image: desantisdomiziano/discovery-service:1.0.0 # La TUA immagine
+    image: ${dockerhub_username}/discovery-service:1.0.0 # La TUA immagine
     ports:
       - "8761:8761"
     networks:
@@ -11,6 +11,25 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
+  config-server:
+    image: ${dockerhub_username}/config-server:1.0.0 # Usa la TUA immagine
+    ports:
+      - "8888:8888"
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+      GITHUB_USERNAME: ${GITHUB_USERNAME} # Variabile d'ambiente
+      GITHUB_PASSWORD: ${GITHUB_PASSWORD} # Variabile d'ambiente
+    networks:
+      - my-network
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - eureka
 
 networks:
   my-network:
